@@ -1,7 +1,7 @@
 // Written by Casey Howard
 
 (function($){  
-	$.fn.limit_textarea = function(options){
+    $.fn.limit_textarea = function(options){
         return this.each(function() { 
             options = $.extend({}, $.textarea_limiter.defaults, options);
             if (options['show_immediately']) {
@@ -12,12 +12,12 @@
             });
         });
         return this;
-	}
-	
+    }
+    
     $.textarea_limiter = {};
     
     $.textarea_limiter.update_description = function(textarea_jquery, options) {
-        var description_id = textarea_jquery[0].id + "_word_limit";
+        var description_id = textarea_jquery[0].id + "_limit_description";
         var existing_descriptions = jQuery('#' + description_id);
         var description_string;
         if (existing_descriptions.length == 0) {
@@ -59,7 +59,7 @@
         description_jquery.html(description_string);
     }
         
-	$.textarea_limiter.defaults = {
+    $.textarea_limiter.defaults = {
         type: 'character',
         max: 255,
         warning_max: 25,
@@ -68,7 +68,7 @@
         error_class: 'error',
         placement: 'after',
         show_immediately: true
-	};
+    };
 })(jQuery);
 
 
