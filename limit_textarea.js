@@ -8,7 +8,7 @@
                 $.textarea_limiter.update_description($(this), options);
             }
             $(this).keyup(function() {
-              $.textarea_limiter.update_description($(this), options);
+                $.textarea_limiter.update_description($(this), options);
             });
         });
         return this;
@@ -26,7 +26,7 @@
             } else if (options['placement'] == 'before') {
                 textarea_jquery.before('<div id="' + description_id + '"></div>');
             } else {
-                alert("limit_textarea: Invalid placement")
+                alert("limit_textarea: Invalid placement");
             }
         }
         if (options['type'] == 'character') {
@@ -64,10 +64,11 @@
         max: 255,
         warning_max: 25,
         success_class: 'success',
-        warning_class: 'notice',
+        warning_class: 'warning',
         error_class: 'error',
         placement: 'after',
-        show_immediately: true
+        show_immediately: true,
+        strict: false
     };
 })(jQuery);
 
