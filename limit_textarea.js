@@ -45,15 +45,15 @@
         this.description_jquery = $('#' + this.description_id);
         
         this.store_old_text = function() {
-            if (this.get_count(this.textarea_jquery.val()) <= this.options['max']) {
+            if ($.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']) <= this.options['max']) {
                 this.last_good_text = this.textarea_jquery.val();
             }
         }
         
         this.fix_text = function() {
-            // We only want to fix the text when the restrict option is enabled
+            // We only want to fix the text when the strict option is enabled
             if (this.options['strict']) {
-                var count = this.get_count(this.textarea_jquery.val());
+                var count = $.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']);
                 if (count > options['max']) {
                     this.textarea_jquery.val(this.last_good_text);
                 }
@@ -62,7 +62,7 @@
         
         this.update_description = function() {
             var description_string;
-            var count = this.get_count(this.textarea_jquery.val());
+            var count = $.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']);
             if (count > options['max']) {
                 description_class = options['error_class'];
                 description_string = (count - options['max']) + ' ' + options['type'] + 's over the limit (max: ' + options['max'] + ')';
@@ -82,18 +82,19 @@
             description_jquery.html(description_string);
         };
         
-        this.get_count = function (text) {
-            if (this.options['type'] == 'character') {
-                return text.length;
-            } else if (this.options['type'] == 'word') {
-                return jQuery.grep(text.split(/\s+/), function(value) {
-                    return value != "";
-                }).length;
-            } else {
-                alert('limit_textarea: Invalid type');
-                return;
-            }
-        };
+    };
+    
+    $.textarea_limiter.get_count = function (text, type) {
+        if (type == 'character') {
+            return text.length;
+        } else if (type == 'word') {
+            return jQuery.grep(text.split(/\s+/), function(value) {
+                return value != "";
+            }).length;
+        } else {
+            alert('limit_textarea: Invalid type');
+            return;
+        }
     };
     
     $.textarea_limiter.defaults = {
