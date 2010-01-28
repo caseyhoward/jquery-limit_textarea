@@ -6,13 +6,19 @@
             options = $.extend({}, $.textarea_limiter.defaults, options);
             var textarea_limiter = new $.textarea_limiter($(this), options);
             if (options['show_immediately']) {
+                textarea_limiter.fix_text();
                 textarea_limiter.update_description();
             }
             $(this).keyup(function() {
+                textarea_limiter.fix_text();
                 textarea_limiter.update_description();
             });
             $(this).keypress(function(e) {
-                return textarea_limiter.check_character(e);
+                textarea_limiter.fix_text();
+                textarea_limiter.update_description();
+            });
+            $(this).keydown(function(e) {
+                textarea_limiter.store_old_text();
             });
         });
         return this;
@@ -22,6 +28,7 @@
         this.options = options;
         this.textarea_jquery = textarea_jquery;
         this.description_id = this.textarea_jquery[0].id + "_limit_description";
+        this.last_good_text = this.textarea_jquery.val();
         
         var existing_descriptions = jQuery('#' + this.description_id);
         if (existing_descriptions.length == 0) {
@@ -37,9 +44,25 @@
         
         this.description_jquery = $('#' + this.description_id);
         
+        this.store_old_text = function() {
+            if (this.get_count(this.textarea_jquery.val()) <= this.options['max']) {
+                this.last_good_text = this.textarea_jquery.val();
+            }
+        }
+        
+        this.fix_text = function() {
+            // We only want to fix the text when the restrict option is enabled
+            if (this.options['strict']) {
+                var count = this.get_count(this.textarea_jquery.val());
+                if (count > options['max']) {
+                    this.textarea_jquery.val(this.last_good_text);
+                }
+            }
+        }
+        
         this.update_description = function() {
             var description_string;
-            var count = this.get_count();
+            var count = this.get_count(this.textarea_jquery.val());
             if (count > options['max']) {
                 description_class = options['error_class'];
                 description_string = (count - options['max']) + ' ' + options['type'] + 's over the limit (max: ' + options['max'] + ')';
@@ -51,39 +74,19 @@
                 }
                 description_string = (options['max'] - count) + ' ' + options['type'] + 's remaining.';
             }
-            var description_jquery = this.description_jquery; // So we can access it in $.each function, kinda lame
+            var description_jquery = this.description_jquery; // So we can access it in $.each() function, kinda lame
             $.each([this.options['error_class'], this.options['warning_class'], this.options['success_class']], function(index, class_name) {
                 description_jquery.removeClass(class_name);
             });
-            this.description_jquery.addClass(description_class);
-            this.description_jquery.html(description_string);
+            description_jquery.addClass(description_class);
+            description_jquery.html(description_string);
         };
         
-        this.check_character = function(e) {
-            var count = this.get_count();
-            // If the key isn't refer to an actual character, then it's good no matter what
-            if (e.charCode == 0 || options['strict'] == false) {
-                return true;
-            }
-            if (count > this.options['max'] && e.which != 8 && e.which != 46) {
-                return false;
-            } else {
-                // If we're limiting by words, using strict, and at the max and the user tries to enter a space then don't let them
-                if (this.options['type'] == 'word' && count == this.options['max'] && e.charcode != 0) {
-                    return false;
-                } else if (this.options['type'] == 'character' && count == this.options['max']) {
-                    return false;
-                }
-
-            }
-            return true;
-        };
-        
-        this.get_count = function () {
+        this.get_count = function (text) {
             if (this.options['type'] == 'character') {
-                return this.textarea_jquery.val().length;
+                return text.length;
             } else if (this.options['type'] == 'word') {
-                return jQuery.grep(this.textarea_jquery.val().split(/\s+/), function(value) {
+                return jQuery.grep(text.split(/\s+/), function(value) {
                     return value != "";
                 }).length;
             } else {
@@ -105,10 +108,6 @@
             strict: false
     };
     
-    
-
-        
-
 })(jQuery);
 
 
