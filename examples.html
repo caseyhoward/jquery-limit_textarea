@@ -7,20 +7,74 @@
     <script type="text/javascript" charset="utf-8">
       $(function() {
         $('#textarea1').limit_textarea();
-        $('#textarea2').limit_textarea({ max: 10, strict: true});
-        $('#textarea3').limit_textarea({ max: 10, type: 'word', strict: true });
-        $('#textarea4').limit_textarea();
-        $('#textarea5').limit_textarea();
+        $('#textarea2').limit_textarea({ max: 10, strict: true, warning_max: 3 });
+        $('#textarea3').limit_textarea({ max: 10, type: 'word', strict: true, warning_max: 0 });
+        $('#textarea4').limit_textarea({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
+        $('#textarea5').limit_textarea({ placement: 'before' });
       });
     </script>
+    
+    
+    <style type="text/css" media="screen">
+      .example h2 {
+      }
+    
+      .example .success {
+        color: green;
+      }
+      .example .warning {
+        color: orange;
+      }
+      .example .error {
+        color: red;
+      }
+      
+      .example4 .super_warning {
+        font-weight: bold;
+        color: blue;
+      }
+    </style>
+    
   </head>
   <body>
     <form action="examples_submit" method="get" accept-charset="utf-8">
-      <textarea name="test1" rows="8" cols="40" id="textarea1"></textarea>
-      <textarea name="test1" rows="8" cols="40" id="textarea2"></textarea>
-      <textarea name="test1" rows="8" cols="40" id="textarea3"></textarea>
-      <textarea name="test1" rows="8" cols="40" id="textarea4"></textarea>
-      <textarea name="test1" rows="8" cols="40" id="textarea5"></textarea>
+      <div class="example example1">
+        <h2>Example 1</h2>
+        <pre>
+          $('#textarea1').limit_textarea();
+        </pre>
+        <div class="">
+          <textarea name="test1" rows="8" cols="40" id="textarea1"></textarea>
+        </div>
+      </div>
+      <div class="example example2">
+        <h2>Example 2</h2>
+        <pre>
+          $('#textarea2').limit_textarea({ max: 10, strict: true, warning_max: 3 });
+        </pre>
+        <textarea name="test1" rows="8" cols="40" id="textarea2"></textarea>
+      </div>
+      <div class="example example3">
+        <h2>Example 3</h2>
+        <pre>
+          $('#textarea3').limit_textarea({ max: 10, type: 'word', strict: true, warning_max: 0 });
+        </pre>
+        <textarea name="test1" rows="8" cols="40" id="textarea3"></textarea>
+      </div>
+      <div class="example example4">
+        <h2>Example 4</h2>
+        <pre>
+          $('#textarea1').limit_textarea({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
+        </pre>
+        <textarea name="test1" rows="8" cols="40" id="textarea4"></textarea>
+      </div>
+      <div class="example example5">
+        <h2>Example 5</h2>
+        <pre>
+          $('#textarea1').limit_textarea({ placement: 'before' });
+        </pre>
+        <textarea name="test1" rows="8" cols="40" id="textarea5"></textarea>
+      </div>
     </form>
   </body>
 </html>
