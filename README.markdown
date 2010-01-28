@@ -30,7 +30,7 @@ Simply call limit_textarea on the jQuery object you wish to apply to with any op
 **strict:** Whether or not we allow the user to go over the limit. Notice: if this is set to true, then the error_class will never be used. Default: false
 
 
-### Examples
+## Examples
 
 Restrict a textarea to 500 words:
     jQuery(text_area_id).limit_textarea({ max: 500, type: 'word'});

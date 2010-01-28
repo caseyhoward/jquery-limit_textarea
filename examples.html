@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title></title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script src="limit_textarea.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(function() {
+        $('#textarea1').limit_textarea();
+        $('#textarea2').limit_textarea({ max: 10, type: 'word', strict: true });
+        $('#textarea3').limit_textarea();
+        $('#textarea4').limit_textarea();
+        $('#textarea5').limit_textarea();
+      });
+    </script>
+  </head>
+  <body>
+    <form action="examples_submit" method="get" accept-charset="utf-8">
+      <textarea name="test1" rows="8" cols="40" id="textarea1"></textarea>
+      <textarea name="test1" rows="8" cols="40" id="textarea2"></textarea>
+      <textarea name="test1" rows="8" cols="40" id="textarea3"></textarea>
+      <textarea name="test1" rows="8" cols="40" id="textarea4"></textarea>
+      <textarea name="test1" rows="8" cols="40" id="textarea5"></textarea>
+    </form>
+  </body>
+</html>
