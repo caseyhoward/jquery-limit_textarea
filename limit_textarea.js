@@ -12,8 +12,8 @@
             $(this).keyup(function() {
                 textarea_limiter.update_description();
             });
-            $(this).keypress(function() {
-                return textarea_limiter.check_character();
+            $(this).keypress(function(e) {
+                return textarea_limiter.check_character(e);
             });
         });
         return this;
@@ -36,7 +36,7 @@
                     alert("limit_textarea: Invalid placement");
                 }
             }
-            count = this.get_count();
+            var count = this.get_count();
             if (count > options['max']) {
                 description_class = options['error_class'];
                 description_string = (count - options['max']) + ' ' + options['type'] + 's over the limit (max: ' + options['max'] + ')';
@@ -56,19 +56,23 @@
             description_jquery.addClass(description_class);
             description_jquery.html(description_string);
         };
-        this.check_character = function() {
-            count = this.get_count(textarea_jquery, options);
-            if (count > options['max']) {
+        this.check_character = function(e) {
+            var count = this.get_count();
+            if (e.charCode == 0) {
                 return true;
+            }
+            if (count > this.options['max'] && e.which != 8 && e.which != 46) {
+                return false;
             } else {
                 // If we're limiting by words, using strict, and at the max and the user tries to enter a space then don't let them
-                if (options['type'] == 'word' && count == options['max'] && options['strict'] && e.which == 32) {
-                    return_value = true;
-                } else if (options['type'] == 'character' && count == options['max'] && options['strict']) {
-                    return_value = false;
+                if (this.options['type'] == 'word' && count == this.options['max'] && this.options['strict'] && e.charcode != 0) {
+                    return false;
+                } else if (this.options['type'] == 'character' && count == this.options['max'] && this.options['strict']) {
+                    return false;
                 }
 
             }
+            return true;
         };
         this.get_count = function () {
             if (this.options['type'] == 'character') {
