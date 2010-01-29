@@ -2,7 +2,7 @@
 
 (function($){  
     $.fn.limit_text = function(options){
-        return this.each(function() { 
+        this.each(function() { 
             options = $.extend({}, $.text_limiter.defaults, options);
             var text_limiter = new $.text_limiter($(this), options);
             if (options['show_immediately']) {
