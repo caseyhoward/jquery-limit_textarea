@@ -18,7 +18,7 @@
                 textarea_limiter.update_description();
             });
             $(this).keydown(function(e) {
-                textarea_limiter.store_old_text();
+                textarea_limiter.store_old_state();
             });
         });
         return this;
@@ -44,9 +44,13 @@
         
         this.description_jquery = $('#' + this.description_id);
         
-        this.store_old_text = function() {
+        this.store_old_state = function() {
             if ($.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']) <= this.options['max']) {
                 this.last_good_text = this.textarea_jquery.val();
+            }
+            if (this.textarea_jquery[0].selectionStart && this.textarea_jquery[0].selectionEnd) {
+                this.last_selection_start = this.textarea_jquery[0].selectionStart;
+                this.last_selection_end = this.textarea_jquery[0].selectionEnd;
             }
         }
         
@@ -56,6 +60,10 @@
                 var count = $.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']);
                 if (count > options['max']) {
                     this.textarea_jquery.val(this.last_good_text);
+                    if (this.textarea_jquery[0].selectionStart && this.textarea_jquery[0].selectionEnd) {
+                        this.textarea_jquery[0].selectionStart = this.last_selection_start;
+                        this.textarea_jquery[0].selectionEnd = this.last_selection_end;
+                    }
                 }
             }
         }
@@ -81,14 +89,13 @@
             description_jquery.addClass(description_class);
             description_jquery.html(description_string);
         };
-        
     };
     
     $.textarea_limiter.get_count = function (text, type) {
         if (type == 'character') {
             return text.length;
         } else if (type == 'word') {
-            return jQuery.grep(text.split(/\s+/), function(value) {
+            return $.grep(text.split(/\s+/), function(value) {
                 return value != "";
             }).length;
         } else {
