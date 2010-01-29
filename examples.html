@@ -6,11 +6,12 @@
     <script src="limit_textarea.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       $(function() {
-        $('#textarea1').limit_textarea();
-        $('#textarea2').limit_textarea({ max: 10, strict: true, warning_max: 3 });
-        $('#textarea3').limit_textarea({ max: 10, type: 'word', strict: true, warning_max: 0 });
-        $('#textarea4').limit_textarea({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
-        $('#textarea5').limit_textarea({ placement: 'before' });
+        $('#textarea1').limit_text();
+        $('#textarea2').limit_text({ max: 10, strict: true, warning_max: 3 });
+        $('#textarea3').limit_text({ max: 10, type: 'word', strict: true, warning_max: 0 });
+        $('#textarea4').limit_text({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
+        $('#textarea5').limit_text({ placement: 'before' });
+        $('#test').limit_text({ strict: true, max: 10 });
       });
     </script>
     
@@ -41,7 +42,7 @@
       <div class="example example1">
         <h2>Example 1</h2>
         <pre>
-          $('#textarea1').limit_textarea();
+          $('#textarea1').limit_text();
         </pre>
         <div class="">
           <textarea name="test1" rows="8" cols="40" id="textarea1"></textarea>
@@ -50,28 +51,28 @@
       <div class="example example2">
         <h2>Example 2</h2>
         <pre>
-          $('#textarea2').limit_textarea({ max: 10, strict: true, warning_max: 3 });
+          $('#textarea2').limit_text({ max: 10, strict: true, warning_max: 3 });
         </pre>
         <textarea name="test1" rows="8" cols="40" id="textarea2"></textarea>
       </div>
       <div class="example example3">
         <h2>Example 3</h2>
         <pre>
-          $('#textarea3').limit_textarea({ max: 10, type: 'word', strict: true, warning_max: 0 });
+          $('#textarea3').limit_text({ max: 10, type: 'word', strict: true, warning_max: 0 });
         </pre>
         <textarea name="test1" rows="8" cols="40" id="textarea3"></textarea>
       </div>
       <div class="example example4">
         <h2>Example 4</h2>
         <pre>
-          $('#textarea1').limit_textarea({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
+          $('#textarea1').limit_text({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
         </pre>
         <textarea name="test1" rows="8" cols="40" id="textarea4"></textarea>
       </div>
       <div class="example example5">
         <h2>Example 5</h2>
         <pre>
-          $('#textarea1').limit_textarea({ placement: 'before' });
+          $('#textarea1').limit_text({ placement: 'before' });
         </pre>
         <textarea name="test1" rows="8" cols="40" id="textarea5"></textarea>
       </div>

@@ -1,68 +1,68 @@
 // Written by Casey Howard
 
 (function($){  
-    $.fn.limit_textarea = function(options){
+    $.fn.limit_text = function(options){
         return this.each(function() { 
-            options = $.extend({}, $.textarea_limiter.defaults, options);
-            var textarea_limiter = new $.textarea_limiter($(this), options);
+            options = $.extend({}, $.text_limiter.defaults, options);
+            var text_limiter = new $.text_limiter($(this), options);
             if (options['show_immediately']) {
-                textarea_limiter.fix_text();
-                textarea_limiter.update_description();
+                text_limiter.restore_old_state();
+                text_limiter.update_description();
             }
             $(this).keyup(function() {
-                textarea_limiter.fix_text();
-                textarea_limiter.update_description();
+                text_limiter.restore_old_state();
+                text_limiter.update_description();
             });
             $(this).keypress(function(e) {
-                textarea_limiter.fix_text();
-                textarea_limiter.update_description();
+                text_limiter.restore_old_state();
+                text_limiter.update_description();
             });
             $(this).keydown(function(e) {
-                textarea_limiter.store_old_state();
+                text_limiter.store_old_state();
             });
         });
         return this;
     }
     
-    $.textarea_limiter = function(textarea_jquery, options) {
+    $.text_limiter = function(text_jquery, options) {
         this.options = options;
-        this.textarea_jquery = textarea_jquery;
-        this.description_id = this.textarea_jquery[0].id + "_limit_description";
-        this.last_good_text = this.textarea_jquery.val();
+        this.text_jquery = text_jquery;
+        this.description_id = this.text_jquery[0].id + "_limit_description";
+        this.last_good_text = this.text_jquery.val();
         
         var existing_descriptions = jQuery('#' + this.description_id);
         if (existing_descriptions.length == 0) {
             var description_div = '<div id="' + this.description_id + '"></div>';
             if (options['placement'] == 'after') {
-                this.textarea_jquery.after(description_div);
+                this.text_jquery.after(description_div);
             } else if (options['placement'] == 'before') {
-                this.textarea_jquery.before(description_div);
+                this.text_jquery.before(description_div);
             } else {
-                alert("limit_textarea: Invalid placement");
+                alert("limit_text: Invalid placement");
             }
         }
         
         this.description_jquery = $('#' + this.description_id);
         
         this.store_old_state = function() {
-            if ($.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']) <= this.options['max']) {
-                this.last_good_text = this.textarea_jquery.val();
-            }
-            if (this.textarea_jquery[0].selectionStart && this.textarea_jquery[0].selectionEnd) {
-                this.last_selection_start = this.textarea_jquery[0].selectionStart;
-                this.last_selection_end = this.textarea_jquery[0].selectionEnd;
+            if ($.text_limiter.get_count(this.text_jquery.val(), this.options['type']) <= this.options['max']) {
+                this.last_good_text = this.text_jquery.val();
+                if (this.text_jquery[0].selectionStart && this.text_jquery[0].selectionEnd) {
+                    this.last_selection_start = this.text_jquery[0].selectionStart;
+                    this.last_selection_end = this.text_jquery[0].selectionEnd;
+                }
             }
         }
         
-        this.fix_text = function() {
+        this.restore_old_state = function() {
             // We only want to fix the text when the strict option is enabled
             if (this.options['strict']) {
-                var count = $.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']);
+                var count = $.text_limiter.get_count(this.text_jquery.val(), this.options['type']);
                 if (count > options['max']) {
-                    this.textarea_jquery.val(this.last_good_text);
-                    if (this.textarea_jquery[0].selectionStart && this.textarea_jquery[0].selectionEnd) {
-                        this.textarea_jquery[0].selectionStart = this.last_selection_start;
-                        this.textarea_jquery[0].selectionEnd = this.last_selection_end;
+                    this.text_jquery.val(this.last_good_text);
+                    if (this.text_jquery[0].selectionStart && this.text_jquery[0].selectionEnd) {
+                        this.text_jquery[0].selectionStart = this.last_selection_start;
+                        this.text_jquery[0].selectionEnd = this.last_selection_end;
                     }
                 }
             }
@@ -70,7 +70,7 @@
         
         this.update_description = function() {
             var description_string;
-            var count = $.textarea_limiter.get_count(this.textarea_jquery.val(), this.options['type']);
+            var count = $.text_limiter.get_count(this.text_jquery.val(), this.options['type']);
             if (count > options['max']) {
                 description_class = options['error_class'];
                 description_string = (count - options['max']) + ' ' + options['type'] + 's over the limit (max: ' + options['max'] + ')';
@@ -91,7 +91,7 @@
         };
     };
     
-    $.textarea_limiter.get_count = function (text, type) {
+    $.text_limiter.get_count = function (text, type) {
         if (type == 'character') {
             return text.length;
         } else if (type == 'word') {
@@ -99,12 +99,12 @@
                 return value != "";
             }).length;
         } else {
-            alert('limit_textarea: Invalid type');
+            alert('limit_text: Invalid type');
             return;
         }
     };
     
-    $.textarea_limiter.defaults = {
+    $.text_limiter.defaults = {
             type: 'character',
             max: 255,
             warning_max: 25,
