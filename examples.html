@@ -4,6 +4,10 @@
     <title></title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
     <script src="jquery.limit_text.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="scripts/shCore.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/shBrushJScript.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/jquery.beautyOfCode.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
       $(function() {
         $('#textarea1').limit_text();
@@ -11,13 +15,33 @@
         $('#textarea3').limit_text({ max: 10, type: 'word', strict: true, warning_max: 0 });
         $('#textarea4').limit_text({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
         $('#textarea5').limit_text({ placement: 'before' });
-        $('#test').limit_text({ strict: true, max: 10 });
+        $('#textarea6').limit_text({ description_id: 'textarea6display' });
+        $('#input7').limit_text({ strict: true, max: 10 });
+        $.beautyOfCode.init('clipboard.swf');
+        $.beautyOfCode.beautifyAll();
+    
+      $("#example1code").beautifyCode('javascript');
+      $("#example2code").beautifyCode('javascript');
+      $("#example3code").beautifyCode('javascript');
+      $("#example4code").beautifyCode('javascript');
+      $("#example5code").beautifyCode('javascript');
+      $("#example6code").beautifyCode('javascript');
+      $("#example7code").beautifyCode('javascript');
+
       });
     </script>
     
+    <link rel="stylesheet" href="styles/SyntaxHighlighter.css" type="text/css" media="screen" title="no title" charset="utf-8">
     
     <style type="text/css" media="screen">
+      .example {
+        width: 800px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 20px;
+      }
+      
       .example h2 {
+        color: #34279F;
       }
     
       .example .success {
@@ -41,8 +65,11 @@
     <form action="examples_submit" method="get" accept-charset="utf-8">
       <div class="example example1">
         <h2>Example 1</h2>
-        <pre>
-          $('#textarea1').limit_text();
+        Using all defaults.
+        <pre id="example1code">
+          <code>
+            $('#textarea1').limit_text();
+          </code>
         </pre>
         <div class="">
           <textarea name="test1" rows="8" cols="40" id="textarea1"></textarea>
@@ -50,33 +77,65 @@
       </div>
       <div class="example example2">
         <h2>Example 2</h2>
-        <pre>
-          $('#textarea2').limit_text({ max: 10, strict: true, warning_max: 3 });
+        <pre id="example2code">
+          <code>
+            $('#textarea2').limit_text({ max: 10, strict: true, warning_max: 3 });
+          </code>
         </pre>
-        <textarea name="test1" rows="8" cols="40" id="textarea2"></textarea>
+        <textarea name="test2" rows="8" cols="40" id="textarea2"></textarea>
       </div>
       <div class="example example3">
         <h2>Example 3</h2>
-        <pre>
-          $('#textarea3').limit_text({ max: 10, type: 'word', strict: true, warning_max: 0 });
+        Allow 10 words maximum. No matter what, the user can't enter more than 10 words. Also, disable the warning styling.
+        <pre id="example3code">
+          <code>
+            $('#textarea3').limit_text({ max: 10, type: 'word', strict: true, warning_max: 0 });  
+          </code>
         </pre>
-        <textarea name="test1" rows="8" cols="40" id="textarea3"></textarea>
+        <textarea name="test3" rows="8" cols="40" id="textarea3"></textarea>
       </div>
       <div class="example example4">
         <h2>Example 4</h2>
-        <pre>
-          $('#textarea1').limit_text({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });
+        Use a custom named class for the warning class.
+        <pre id="example4code">
+          <code>
+            $('#textarea4').limit_text({ max: 10, type: 'word', warning_class: 'super_warning', warning_max: 5 });  
+          </code>
         </pre>
-        <textarea name="test1" rows="8" cols="40" id="textarea4"></textarea>
+        <textarea name="test4" rows="8" cols="40" id="textarea4"></textarea>
       </div>
       <div class="example example5">
         <h2>Example 5</h2>
-        <pre>
-          $('#textarea1').limit_text({ placement: 'before' });
+        Place the description element before the textarea.
+        <pre id="example5code">
+          <code>
+            $('#textarea5').limit_text({ placement: 'before' });  
+          </code>
         </pre>
-        <textarea name="test1" rows="8" cols="40" id="textarea5"></textarea>
+        <textarea name="test5" rows="8" cols="40" id="textarea5"></textarea>
       </div>
-      <input id='test' type='text'>
+      <div class="example example6">
+        <h2>Example 6</h2>
+        Uses an already existing element for the description.
+        <pre id="example6code">
+          <code>
+            $('#textarea6').limit_text({ description_id: 'textarea6display' });  
+          </code>
+        </pre>
+        <textarea name="test6" rows="8" cols="40" id="textarea6"></textarea>
+        <span id="textarea6display"></span>
+      </div>
+      <div class="example example7">
+        <h2>Example 7</h2>
+        Use an text input field instead of a textarea.
+        <pre id="example7code">
+          <code>
+            $('#input7').limit_text({ strict: true, max: 10 });  
+          </code>
+        </pre>
+        <input id='input7' type='text'>
+        <span id="textarea6display"></span>
+      </div>
     </form>
     <div id="debug"></div>
   </body>
