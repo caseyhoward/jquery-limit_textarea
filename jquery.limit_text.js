@@ -27,7 +27,13 @@
     $.text_limiter = function(text_jquery, options) {
         this.options = options;
         this.text_jquery = text_jquery;
-        this.description_id = this.text_jquery[0].id + "_limit_description";
+        
+        if (this.options['description_id']) {
+            this.description_id = this.options['description_id'];
+        } else {
+            this.description_id = this.text_jquery[0].id + "_limit_description";
+        }
+        
         this.last_good_text = this.text_jquery.val();
         
         var existing_descriptions = jQuery('#' + this.description_id);
@@ -44,16 +50,24 @@
         
         this.description_jquery = $('#' + this.description_id);
         
+        
+        // If the 'strict' option is enabled then we store the current value of the textarea which is assumed to be valid.
+        // This string is then used to restore the value to the textarea, if the textarea becomes invalid.
+        // We also store the current selection, so that if we end up restoring to text, we can restore the cursor position
+        // instead of leaving it at the end which is the default.
         this.store_old_state = function() {
-            if ($.text_limiter.get_count(this.text_jquery.val(), this.options['type']) <= this.options['max']) {
-                this.last_good_text = this.text_jquery.val();
-                if (this.text_jquery[0].selectionStart && this.text_jquery[0].selectionEnd) {
-                    this.last_selection_start = this.text_jquery[0].selectionStart;
-                    this.last_selection_end = this.text_jquery[0].selectionEnd;
+            if (this.options['strict']) {
+                if ($.text_limiter.get_count(this.text_jquery.val(), this.options['type']) <= this.options['max']) {
+                    this.last_good_text = this.text_jquery.val();
+                    if (this.text_jquery[0].selectionStart && this.text_jquery[0].selectionEnd) {
+                        this.last_selection_start = this.text_jquery[0].selectionStart;
+                        this.last_selection_end = this.text_jquery[0].selectionEnd;
+                    }
                 }
             }
         }
         
+        // If the 'strict' option is enabled and the textarea value becomes too long, we restore the text and cursor position        
         this.restore_old_state = function() {
             // We only want to fix the text when the strict option is enabled
             if (this.options['strict']) {
@@ -67,6 +81,7 @@
                 }
             }
         }
+        
         
         this.update_description = function() {
             var description_string;
@@ -113,7 +128,8 @@
             error_class: 'error',
             placement: 'after',
             show_immediately: true,
-            strict: false
+            strict: false,
+            description_id: null
     };
     
 })(jQuery);
