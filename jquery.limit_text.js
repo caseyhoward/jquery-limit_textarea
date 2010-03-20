@@ -36,6 +36,8 @@
         
         this.last_good_text = this.text_jquery.val();
         
+        
+        // Create the description element if it doesn't exist.
         var existing_descriptions = jQuery('#' + this.description_id);
         if (existing_descriptions.length == 0) {
             var description_div = '<div id="' + this.description_id + '"></div>';
@@ -51,7 +53,7 @@
         this.description_jquery = $('#' + this.description_id);
         
         
-        // If the 'strict' option is enabled then we store the current value of the textarea which is assumed to be valid.
+        // If the 'strict' option is enabled then we store the current value of the textarea which is assumed to be valid at this point in time.
         // This string is then used to restore the value to the textarea, if the textarea becomes invalid.
         // We also store the current selection, so that if we end up restoring to text, we can restore the cursor position
         // instead of leaving it at the end which is the default.
@@ -82,7 +84,11 @@
             }
         }
         
-        
+        // Depending on the character/word count, the message shown to the user will be changed.
+        // Also, the css class for that message will be changed accordingly.
+        // If the remaining count is less than the max and greater than or equal to the warning_max, then the success class will be used.
+        // If the remaining count is less than the warning_max, but greater than or equal to 0, then the warning class is used.
+        // If the remaining count is less than 0, then the error class is used.
         this.update_description = function() {
             var description_string;
             var count = $.text_limiter.get_count(this.text_jquery.val(), this.options['type']);
@@ -95,7 +101,7 @@
                 } else {
                     description_class = options['success_class'];
                 }
-                description_string = (options['max'] - count) + ' ' + options['type'] + 's remaining.';
+                description_string = (options['max'] - count) + ' ' + options['type'] + '(s) remaining.';
             }
             var description_jquery = this.description_jquery; // So we can access it in $.each() function, kinda lame
             $.each([this.options['error_class'], this.options['warning_class'], this.options['success_class']], function(index, class_name) {
@@ -106,7 +112,13 @@
         };
     };
     
-    $.text_limiter.get_count = function (text, type) {
+    // Gets either the character count or the word count of a string
+    // Parameters:
+    //      text - the string to be counted
+    //      type - either 'word' or 'character'
+    // Returns:
+    //      The number of letters or words in the string
+    $.text_limiter.get_count = function(text, type) {
         if (type == 'character') {
             return text.length;
         } else if (type == 'word') {
